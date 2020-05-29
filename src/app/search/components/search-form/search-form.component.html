@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Github Search</mat-card-title>
+    <mat-card-subtitle>Search more than 171M repositories</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="Ex. mayrascript">
+        <mat-error *ngIf="form.controls.username.hasError('required')">
+          Username is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="search()">Search</button>
+    </form>
+
+  </mat-card-content>
+</mat-card>
+
+
