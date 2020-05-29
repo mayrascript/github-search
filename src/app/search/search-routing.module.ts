@@ -8,12 +8,12 @@ const routes: Routes = [
   {
     path: '',
     component: SearchComponent,
-    children: [
+   /* children: [
       {
         path: '',
         component: SearchListComponent
       }
-    ],
+    ],*/
   }
 ];
 

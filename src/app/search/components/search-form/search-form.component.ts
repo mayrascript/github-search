@@ -25,7 +25,4 @@ export class SearchFormComponent implements OnInit {
       username: ['', Validators.required]
     });
   }
-
-
-
 }

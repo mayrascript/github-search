@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/core/services/users/users.service';
+import { SearchResult } from 'src/app/core/models/search-result.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -7,6 +9,7 @@ import { UsersService } from 'src/app/core/services/users/users.service';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  searchResults$: Observable<SearchResult>;
 
   constructor(private usersService: UsersService) { }
 
@@ -18,8 +21,7 @@ export class SearchComponent implements OnInit {
   }
 
   private searchUser(username: string) {
-    this.usersService.getAll(username)
-    .subscribe(res => console.log(res));
+    this.searchResults$ = this.usersService.getAll(username);
   }
 
 }

@@ -1,1 +1,37 @@
-<p>search-list works!</p>
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Picture Column -->
+  <ng-container matColumnDef="picture">
+    <mat-header-cell *matHeaderCellDef> Picture </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <img class="profile-picture" [src]="element.avatar_url" [alt]="element.login">
+    </mat-cell>
+  </ng-container>
+
+  <!-- Username Column -->
+  <ng-container matColumnDef="username">
+    <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+  </ng-container>
+
+
+  <!-- Name Column -->
+<!--  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+  </ng-container>-->
+
+  <!-- Weight Column -->
+<!--  <ng-container matColumnDef="stars">
+    <mat-header-cell *matHeaderCellDef> Stars </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+  </ng-container>-->
+
+  <!-- Symbol Column -->
+  <!--<ng-container matColumnDef="followers">
+    <mat-header-cell *matHeaderCellDef> Followers </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+  </ng-container>-->
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
