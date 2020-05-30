@@ -1,4 +1,4 @@
-export interface UserInfo {
+export interface UserInfoDto {
   id: number;
   login: string;
   node_id: string;

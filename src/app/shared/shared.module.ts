@@ -11,17 +11,12 @@ const modules = [
   MatInputModule,
   MatButtonModule,
   MatCardModule,
-  MatTableModule
+  MatTableModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    ...modules
-  ],
-  exports: [
-    ...modules
-  ]
+  imports: [CommonModule, ...modules],
+  exports: [...modules],
 })
-export class SharedModule { }
+export class SharedModule {}

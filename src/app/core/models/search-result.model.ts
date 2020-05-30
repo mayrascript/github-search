@@ -1,7 +1,6 @@
-import { UserInfo } from './user-info.model';
+import { User } from 'src/app/core/models/user.model';
 
 export interface SearchResult {
-  total_count: number;
-  incomplete_results: boolean;
-  items: UserInfo[];
+  totalCount: number;
+  users: User[];
 }

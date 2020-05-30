@@ -4,25 +4,25 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
-  styleUrls: ['./search-form.component.scss']
+  styleUrls: ['./search-form.component.scss'],
 })
 export class SearchFormComponent implements OnInit {
   @Output() valueSubmitted = new EventEmitter<string>();
 
   form: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.buildForm();
   }
 
   search() {
-    const {username} = this.form.value;
+    const { username } = this.form.value;
     this.valueSubmitted.emit(username);
   }
   private buildForm() {
     this.form = this.fb.group({
-      username: ['', Validators.required]
+      username: ['', Validators.required],
     });
   }
 }
