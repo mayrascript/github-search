@@ -10,7 +10,7 @@ export class SearchListComponent implements OnInit {
   @Input() dataSource: UserInfo[] = [];
   displayedColumns: string[] = ['picture', 'username'];
 
-  // displayedColumns: string[] = ['picture', 'description', 'stars', 'followers'];
+  //displayedColumns: string[] = ['picture', 'description', 'stars', 'followers'];
 
   constructor() { }
 
