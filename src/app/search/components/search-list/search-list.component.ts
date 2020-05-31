@@ -13,7 +13,7 @@ export class SearchListComponent implements OnInit {
 
   @Output() pageChanged = new EventEmitter<PageEvent>();
 
-  displayedColumns: string[] = ['picture', 'username', 'bio', 'followers'];
+  displayedColumns: string[] = ['picture', 'username', 'bio', 'followers', 'actions'];
 
   constructor() {}
 

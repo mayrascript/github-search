@@ -46,10 +46,6 @@ export class AuthService {
           this.token = res.access_token;
           return res.access_token;
         }),
-        catchError((err) => {
-          console.log(err);
-          return err;
-        }),
       );
   }
 

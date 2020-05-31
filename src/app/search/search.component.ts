@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SearchResult } from 'src/app/core/models/search-result.model';
 import { PageEvent } from '@angular/material/paginator';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { SearchService } from 'src/app/core/services/search/search.service';
 
 @Component({

@@ -28,7 +28,7 @@ export class UsersService {
       followers: userDetail.followers,
       avatarUrl: userDetail.avatar_url,
       bio: userDetail.bio,
-      url: userDetail.bio,
+      url: userDetail.html_url,
       email: userDetail.email,
     } as User);
 }
