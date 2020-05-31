@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { AccessTokenDto } from 'src/app/core/dtos/access-token.dto';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +19,12 @@ export class AuthService {
   private _code: string;
   // tslint:disable-next-line:variable-name
   private _token: string;
+  // tslint:disable-next-line:variable-name
+  private _redirecUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.buildRedirectUrl();
+  }
 
   requestAccessToken() {
     const params = new HttpParams({
@@ -48,10 +53,6 @@ export class AuthService {
       );
   }
 
-  getGithubAuthUrl() {
-    return `${this.path}/${this.authEndpoint}?client_id=${this.clientId}&redirect_uri=${this.redirectUrl}`;
-  }
-
   get code(): string {
     return this._code;
   }
@@ -65,7 +66,20 @@ export class AuthService {
   }
 
   set token(value: string) {
-    console.log(value);
     this._token = value;
+  }
+
+  get redirecUrl(): string {
+    return this._redirecUrl;
+  }
+
+  private buildRedirectUrl() {
+    const params = this.router
+      .createUrlTree(['/'], {
+        queryParams: { client_id: this.clientId, redirect_uri: this.redirectUrl },
+      })
+      .toString();
+
+    this._redirecUrl = `${this.path}/${this.authEndpoint}${params}`;
   }
 }

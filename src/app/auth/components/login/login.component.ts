@@ -12,7 +12,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   doLogin() {
-    const url = this.authService.getGithubAuthUrl();
-    location.href = url;
+    const url = this.authService.redirecUrl;
+    if (url) {
+      location.href = url;
+    }
   }
 }
