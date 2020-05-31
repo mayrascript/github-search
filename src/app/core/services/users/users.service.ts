@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { from, Observable } from 'rxjs';
 import { SearchResultDto } from 'src/app/core/dtos/search-result.dto';
@@ -7,6 +7,8 @@ import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
 import { SearchResult } from 'src/app/core/models/search-result.model';
 import { UserDetailDto } from 'src/app/core/dtos/user-detail.dto';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { User } from 'src/app/core/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,29 +18,50 @@ export class UsersService {
   private readonly path = '/users';
   private readonly baseUrl = environment.baseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAll(username: string): Observable<SearchResult> {
     return this.getSearchResults(username).pipe(
       mergeMap((result) =>
         from(result.items).pipe(
           mergeMap((user: UserInfoDto) =>
-            this.getUserInfo(user.login).pipe(map((userDetail) => ({ ...user, ...userDetail }))),
+            this.getUserInfo(user.login).pipe(map((userDetail) => this.mapUser(userDetail))),
           ),
           toArray(),
           map((users) => ({ users, totalCount: result.total_count })),
         ),
       ),
-      tap(console.log),
     );
   }
 
   private getSearchResults(username: string): Observable<SearchResultDto> {
     const params = new HttpParams({ fromObject: { q: username } });
-    return this.http.get<SearchResultDto>(`${this.baseUrl}${this.searchPath}`, { params });
+    return this.http.get<SearchResultDto>(`${this.baseUrl}${this.searchPath}`, {
+      params,
+      headers: this.getAuthHeaders(),
+    });
   }
 
   private getUserInfo(username: string): Observable<UserDetailDto> {
-    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`);
+    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  private mapUser = (userDetail: UserDetailDto): User =>
+    ({
+      followers: userDetail.followers,
+      avatarUrl: userDetail.avatar_url,
+      bio: userDetail.bio,
+      url: userDetail.bio,
+      email: userDetail.email,
+    } as User);
+
+  // TODO: add a httpinterceptor
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.token;
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
   }
 }

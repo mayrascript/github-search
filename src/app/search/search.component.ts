@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/core/services/users/users.service';
 import { Observable } from 'rxjs';
 import { SearchResultDto } from 'src/app/core/dtos/search-result.dto';
+import { SearchResult } from 'src/app/core/models/search-result.model';
 
 @Component({
   selector: 'app-search',
@@ -9,7 +10,7 @@ import { SearchResultDto } from 'src/app/core/dtos/search-result.dto';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
-  searchResults$: Observable<SearchResultDto>;
+  searchResults$: Observable<SearchResult>;
 
   constructor(private usersService: UsersService) {}
 
@@ -20,7 +21,6 @@ export class SearchComponent implements OnInit {
   }
 
   private searchUser(username: string) {
-    this.usersService.getAll(username).subscribe();
-    // this.searchResults$ = this.usersService.getAll(username);
+    this.searchResults$ = this.usersService.getAll(username);
   }
 }

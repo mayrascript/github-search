@@ -2,7 +2,7 @@
   <app-search-form (valueSubmitted)="onValueSubmitted($event)"></app-search-form>
   <app-search-list
     *ngIf="searchResults$ | async as dataSource"
-    [dataSource]="dataSource.items"
+    [dataSource]="dataSource.users"
   ></app-search-list>
 </mat-card>
 <!--<router-outlet></router-outlet>-->

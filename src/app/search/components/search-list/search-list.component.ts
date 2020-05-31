@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
+import { User } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-search-list',
@@ -7,10 +7,8 @@ import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
   styleUrls: ['./search-list.component.scss'],
 })
 export class SearchListComponent implements OnInit {
-  @Input() dataSource: UserInfoDto[] = [];
-  displayedColumns: string[] = ['picture', 'username'];
-
-  //displayedColumns: string[] = ['picture', 'description', 'stars', 'followers'];
+  @Input() dataSource: User[] = [];
+  displayedColumns: string[] = ['picture', 'username', 'bio', 'followers'];
 
   constructor() {}
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth',
@@ -8,13 +9,25 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private authService: AuthService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      if (params.code) {
-        this.authService.code = params.code;
-      }
-    });
+    this.route.queryParams
+      .pipe(
+        map((params) => {
+          const code = params && params.code;
+          if (code) {
+            this.authService.code = params.code;
+            // TODO: add notification alert
+          }
+          return code;
+        }),
+        switchMap((code) => code && this.authService.requestAccessToken()),
+      )
+      .subscribe((res) => this.router.navigate(['/search']));
   }
 }

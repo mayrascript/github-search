@@ -1,28 +1,55 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { AccessTokenDto } from 'src/app/core/dtos/access-token.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly path = environment.githubAuthUrl;
+  private readonly authEndpoint = 'authorize';
+  private readonly accessToken = 'access_token';
   private readonly clientId = environment.clientId;
+  private readonly clientSecret = environment.clientSecret;
   private readonly redirectUrl = environment.callbackUrl;
   // tslint:disable-next-line:variable-name
   private _code: string;
+  // tslint:disable-next-line:variable-name
+  private _token: string;
 
   constructor(private http: HttpClient) {}
 
-  requestGithubLogin() {
+  requestAccessToken() {
     const params = new HttpParams({
-      fromObject: { client_id: this.clientId, redirect_uri: this.redirectUrl },
+      fromObject: {
+        client_id: this.clientId,
+        redirect_uri: this.redirectUrl,
+        client_secret: this.clientSecret,
+        code: this.code,
+      },
     });
-    return this.http.get(`${this.path}`, { params });
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+    });
+
+    return this.http
+      .post<AccessTokenDto>(`${this.path}/${this.accessToken}`, null, { params, headers })
+      .pipe(
+        map((res) => {
+          this.token = res.access_token;
+          return res.access_token;
+        }),
+        catchError((err) => {
+          console.log(err);
+          return err;
+        }),
+      );
   }
 
   getGithubAuthUrl() {
-    return `${this.path}?client_id=${this.clientId}&redirect_uri=${this.redirectUrl}`;
+    return `${this.path}/${this.authEndpoint}?client_id=${this.clientId}&redirect_uri=${this.redirectUrl}`;
   }
 
   get code(): string {
@@ -30,7 +57,15 @@ export class AuthService {
   }
 
   set code(value: string) {
-    console.log(value);
     this._code = value;
+  }
+
+  get token(): string {
+    return this._token;
+  }
+
+  set token(value: string) {
+    console.log(value);
+    this._token = value;
   }
 }
