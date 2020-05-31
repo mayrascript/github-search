@@ -44,14 +44,11 @@ export class UsersService {
     });
     return this.http.get<SearchResultDto>(`${this.baseUrl}${this.searchPath}`, {
       params,
-      headers: this.getAuthHeaders(),
     });
   }
 
   private getUserInfo(username: string): Observable<UserDetailDto> {
-    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`, {
-      headers: this.getAuthHeaders(),
-    });
+    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`);
   }
 
   private mapUser = (userDetail: UserDetailDto): User =>
@@ -62,12 +59,4 @@ export class UsersService {
       url: userDetail.bio,
       email: userDetail.email,
     } as User);
-
-  // TODO: add a httpinterceptor
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.token;
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-  }
 }

@@ -11,12 +11,11 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-
   },
   {
     path: 'search',
     loadChildren: () => import('./search/search.module').then((m) => m.SearchModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
