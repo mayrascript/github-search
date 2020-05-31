@@ -7,48 +7,20 @@ import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
 import { SearchResult } from 'src/app/core/models/search-result.model';
 import { UserDetailDto } from 'src/app/core/dtos/user-detail.dto';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { User } from 'src/app/core/models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  private readonly searchPath = '/search/users'; // TODO: move logic
   private readonly path = '/users';
   private readonly baseUrl = environment.baseUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient) {}
 
-  getAll(username: string, pageSize?: number, pageIndex?: number): Observable<SearchResult> {
-    return this.getSearchResults(username, pageSize, pageIndex).pipe(
-      mergeMap((result) =>
-        from(result.items).pipe(
-          mergeMap((user: UserInfoDto) =>
-            this.getUserInfo(user.login).pipe(map((userDetail) => this.mapUser(userDetail))),
-          ),
-          toArray(),
-          map((users) => ({ users, totalCount: result.total_count })),
-        ),
-      ),
-    );
-  }
-
-  private getSearchResults(
-    username: string,
-    pageSize = 5,
-    pageIndex = 0,
-  ): Observable<SearchResultDto> {
-    const params = new HttpParams({
-      fromObject: { q: username, per_page: pageSize.toString(), page: pageIndex.toString() },
-    });
-    return this.http.get<SearchResultDto>(`${this.baseUrl}${this.searchPath}`, {
-      params,
-    });
-  }
-
-  private getUserInfo(username: string): Observable<UserDetailDto> {
-    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`);
+  getByUsername(username: string): Observable<User> {
+    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`)
+      .pipe(map((userDetail) => this.mapUser(userDetail)));
   }
 
   private mapUser = (userDetail: UserDetailDto): User =>

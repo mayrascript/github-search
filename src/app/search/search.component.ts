@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from 'src/app/core/services/users/users.service';
 import { Observable } from 'rxjs';
 import { SearchResult } from 'src/app/core/models/search-result.model';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs/operators';
+import { SearchService } from 'src/app/core/services/search/search.service';
 
 @Component({
   selector: 'app-search',
@@ -15,7 +15,7 @@ export class SearchComponent implements OnInit {
   paginationSetup: { pageSize: number; pageIndex: number };
   private username;
 
-  constructor(private usersService: UsersService) {}
+  constructor(private searchService: SearchService) {}
 
   ngOnInit(): void {}
 
@@ -25,15 +25,13 @@ export class SearchComponent implements OnInit {
   }
 
   onPageChanged(ev: PageEvent) {
-    console.log(ev);
     this.searchUser(this.username, ev.pageSize, ev.pageIndex);
   }
 
   private searchUser(username: string, pageSize?: number, pageIndex?: number) {
-    this.searchResults$ = this.usersService.getAll(username, pageSize, pageIndex).pipe(
+    this.searchResults$ = this.searchService.getAll(username, pageSize, pageIndex).pipe(
       finalize(() => {
         this.paginationSetup = { pageSize, pageIndex };
-        console.log(this.paginationSetup);
       }),
     );
   }
