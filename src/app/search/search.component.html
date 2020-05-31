@@ -1,8 +1,8 @@
 <mat-card>
   <app-search-form (valueSubmitted)="onValueSubmitted($event)"></app-search-form>
   <app-search-list
-    *ngIf="searchResults$ | async as dataSource"
-    [dataSource]="dataSource.users"
+    [source]="searchResults$ | async"
+    [pagigationSetup]="paginationSetup"
+    (pageChanged)="onPageChanged($event)"
   ></app-search-list>
 </mat-card>
-<!--<router-outlet></router-outlet>-->

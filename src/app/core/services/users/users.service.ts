@@ -20,8 +20,8 @@ export class UsersService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getAll(username: string): Observable<SearchResult> {
-    return this.getSearchResults(username).pipe(
+  getAll(username: string, pageSize?: number, pageIndex?: number): Observable<SearchResult> {
+    return this.getSearchResults(username, pageSize, pageIndex).pipe(
       mergeMap((result) =>
         from(result.items).pipe(
           mergeMap((user: UserInfoDto) =>
@@ -34,8 +34,14 @@ export class UsersService {
     );
   }
 
-  private getSearchResults(username: string): Observable<SearchResultDto> {
-    const params = new HttpParams({ fromObject: { q: username } });
+  private getSearchResults(
+    username: string,
+    pageSize = 5,
+    pageIndex = 0,
+  ): Observable<SearchResultDto> {
+    const params = new HttpParams({
+      fromObject: { q: username, per_page: pageSize.toString(), page: pageIndex.toString() },
+    });
     return this.http.get<SearchResultDto>(`${this.baseUrl}${this.searchPath}`, {
       params,
       headers: this.getAuthHeaders(),
