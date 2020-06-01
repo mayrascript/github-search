@@ -9,22 +9,19 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SearchService {
   private readonly path = '/search/users';
   private readonly baseUrl = environment.baseUrl;
 
-
-  constructor(private http: HttpClient, private usersService: UsersService) { }
+  constructor(private http: HttpClient, private usersService: UsersService) {}
 
   getAll(username: string, pageSize?: number, pageIndex?: number): Observable<SearchResult> {
     return this.getSearchResults(username, pageSize, pageIndex).pipe(
       mergeMap((result) =>
         from(result.items).pipe(
-          mergeMap((user: UserInfoDto) =>
-            this.usersService.getByUsername(user.login),
-          ),
+          mergeMap((user: UserInfoDto) => this.usersService.getByUsername(user.login)),
           toArray(),
           map((users) => ({ users, totalCount: result.total_count })),
         ),

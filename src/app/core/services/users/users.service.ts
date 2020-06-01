@@ -16,7 +16,8 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getByUsername(username: string): Observable<User> {
-    return this.http.get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`)
+    return this.http
+      .get<UserDetailDto>(`${this.baseUrl}${this.path}/${username}`)
       .pipe(map((userDetail) => this.mapUser(userDetail)));
   }
 

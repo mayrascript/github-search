@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EMPTY, iif, of } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -14,22 +15,25 @@ export class AuthComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams
       .pipe(
-        map((params) => {
-          const code = params && params.code;
-          if (code) {
-            this.authService.code = params.code;
-            this.snackBar.open('Welcome!');
-          }
-          return code;
-        }),
-        switchMap((code) => code && this.authService.requestAccessToken()),
+        switchMap((params: any) =>
+          iif(
+            () => params && params.code,
+            this.authService.requestAccessToken(params.code),
+            of(EMPTY),
+          ),
+        ),
       )
-      .subscribe((res) => this.router.navigate(['/search']));
+      .subscribe((res) => {
+        this.snackBar.open('Welcome!', '', {
+          duration: 300,
+        });
+        this.router.navigate(['/search']);
+      });
   }
 }
