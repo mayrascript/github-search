@@ -19,7 +19,7 @@ const modules = [
   MatPaginatorModule,
   MatIconModule,
   MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
 ];
 
 @NgModule({

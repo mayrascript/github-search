@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly path = environment.githubAuthUrl;
+  private readonly corsPath = 'https://cors-anywhere.herokuapp.com';
   private readonly authEndpoint = 'authorize';
   private readonly accessToken = 'access_token';
   private readonly clientId = environment.clientId;
@@ -26,13 +27,13 @@ export class AuthService {
     this.buildRedirectUrl();
   }
 
-  requestAccessToken() {
+  requestAccessToken(code?: string) {
     const params = new HttpParams({
       fromObject: {
         client_id: this.clientId,
         redirect_uri: this.redirectUrl,
         client_secret: this.clientSecret,
-        code: this.code,
+        code: code || this.code,
       },
     });
     const headers = new HttpHeaders({
@@ -40,7 +41,10 @@ export class AuthService {
     });
 
     return this.http
-      .post<AccessTokenDto>(`${this.path}/${this.accessToken}`, null, { params, headers })
+      .post<AccessTokenDto>(`${this.corsPath}/${this.path}/${this.accessToken}`, null, {
+        params,
+        headers,
+      })
       .pipe(
         map((res) => {
           this.token = res.access_token;

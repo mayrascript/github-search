@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   baseUrl: 'https://api.github.com',
   githubAuthUrl: 'https://github.com/login/oauth',
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
+  clientId: '1474872cbeecc4172bdf',
+  clientSecret: '2132bd94a8efde7aa8fbadaa5e9c0592619c160d',
   callbackUrl: 'http://localhost:4200/auth',
 };
 
