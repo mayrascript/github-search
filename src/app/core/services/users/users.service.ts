@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
-import { from, Observable } from 'rxjs';
-import { SearchResultDto } from 'src/app/core/dtos/search-result.dto';
-import { map, mergeMap, tap, toArray } from 'rxjs/operators';
-import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
-import { SearchResult } from 'src/app/core/models/search-result.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserDetailDto } from 'src/app/core/dtos/user-detail.dto';
 import { User } from 'src/app/core/models/user.model';
 

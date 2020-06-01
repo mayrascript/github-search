@@ -6,7 +6,7 @@ import { UserInfoDto } from 'src/app/core/dtos/user-info.dto';
 import { UsersService } from 'src/app/core/services/users/users.service';
 import { SearchResultDto } from 'src/app/core/dtos/search-result.dto';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
